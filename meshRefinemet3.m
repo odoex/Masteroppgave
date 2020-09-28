@@ -1,5 +1,5 @@
 % Number of points in space and time
-m = 65;
+m = 9;
 m_x = m;
 m_y = m;
 n = 500;
@@ -41,7 +41,7 @@ t = linspace(t_0,t_n,n);
 
 for i = 1:(n-1)
     
-    U = RK_4(U,t(i),h,k,a,b,g_x,g_y,m_x,m_y);
+    U = RK_ny(U,t(i),h,k,a,b,g_x,g_y,m_x,m_y);
 
      
     %U(1,:) = sin(-a*t(i+1)) + sin(y-b*t(i+1));

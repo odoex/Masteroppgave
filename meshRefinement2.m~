@@ -80,22 +80,22 @@ t = t_0;%linspace(t_0,t_n,n);
 
 
 % Exact solution
-%sol = sin(X - a*t_n) + sin(Y - b*t_n);
+sol = sin(X - a*t_n) + sin(Y - b*t_n);
 
 
 %disp(U);
 %disp(sol);
 
-%E = abs(U-sol');
-% error = norm(E);
-% disp(error);
+E = abs(U-sol');
+error = norm(E);
+disp(error);
 
 % Plot exact solution and approximated solution
-% figure 
-% mesh(sol);
+figure 
+mesh(sol);
 
 figure
-mesh(G.u)
+mesh(U)
 
-% figure 
-% mesh(E);
+figure 
+mesh(E);

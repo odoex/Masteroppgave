@@ -15,7 +15,7 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
         G.t = t + G.k; % Kan puttes inn i en annen funksjon?
         
         if (G.child ~= 0)
-            G.child = finiteVolume(G.child,a,b,t_0,t+G.k,f); % tidssteget der det slapp ... Sjekk om det er riktig k
+            G = finiteVolume(G.chid,a,b,t_0,t+k,f); % tidssteget der det slapp
             G = projectFlux(G,G.child);
         end
         
