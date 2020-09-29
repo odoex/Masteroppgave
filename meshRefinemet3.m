@@ -2,7 +2,7 @@
 m = 9;
 m_x = m;
 m_y = m;
-n = 500;
+n = 10;
 
 % Intervals in space and time
 x_0 = 0;
@@ -35,15 +35,18 @@ g_y = @(s,j) (sin(-a*s) + sin(y(j)-b*s));
 
 % Initializing the solution U (skal lagres i grid)
 U = F;
-
+disp(U)
 t = linspace(t_0,t_n,n);
 
 
 for i = 1:(n-1)
     
     U = RK_ny(U,t(i),h,k,a,b,g_x,g_y,m_x,m_y);
-
-     
+    
+    if i == 1
+        disp(U)
+    end
+    
     %U(1,:) = sin(-a*t(i+1)) + sin(y-b*t(i+1));
     %U(:,1) = sin(x-a*t(i+1)) + sin(-b*t(i+1));
     
@@ -79,6 +82,6 @@ mesh(sol);
 
 figure
 mesh(U)
-
+%disp(U)
 figure 
 mesh(E);

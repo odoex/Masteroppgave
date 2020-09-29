@@ -14,6 +14,13 @@ function [U] = RK_4(G,t,a,b,f)
     k4 = rhs(U + k*k3,t + k,a,b,f,G);
     
     U = U + (k/6)*(k1 + 2*k2 + 2*k3 + k4);
+     if (G.parent ~= 0)
+         disp(k1)
+         disp(k2)
+%         disp(k3)
+%         disp(k4)
+%         disp(U)
+     end
     
 end
 

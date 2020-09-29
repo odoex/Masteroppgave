@@ -1,9 +1,9 @@
 % Number of points in space and time
 % For main grid m = 9
-m = 9;
+m = 5;
 m_x = m;
 m_y = m;
-n = 1000;
+n = 10;
 
 % Intervals in time
 t_0 = 0;
@@ -22,11 +22,13 @@ f = @(x,y,s) sin(x - a*s) + sin(y - b*s);
 G = Node(0, [0,0,1,1], 1/(m-1), k, m, n);
 
 % Fine grid: 
-location_1 = [3*G.h,3*G.h,4,4];
+locx = 2;
+locy = 2;
+location_1 = [(locx-1)*G.h,(locy-1)*G.h,locx,locy];
 ratio = 2;
 m_1 = 5;
 
-G_1 = Node(G, location_1, G.h/ratio, k, m_1, n); 
+G_1 = Node(G, location_1, G.h/ratio, k/ratio, m_1, n);
 G.child = G_1;
 % PROBLEM TIL I MORGEN: vil ikke lage node ut av G.child, setter den til null av en rar grunn
 % prøv å lage noden først, se hva den blir og så sette G.child til å være
@@ -78,6 +80,8 @@ t = t_0;%linspace(t_0,t_n,n);
 %    U = U_n;
 
 
+error = calculateError(G,a,b);
+%error1 = calculateError(G.child);
 
 % Exact solution
 %sol = sin(X - a*t_n) + sin(Y - b*t_n);
@@ -88,14 +92,18 @@ t = t_0;%linspace(t_0,t_n,n);
 
 %E = abs(U-sol');
 % error = norm(E);
-% disp(error);
+disp(error);
+
 
 % Plot exact solution and approximated solution
 % figure 
 % mesh(sol);
 
 figure
-mesh(G.u)
+mesh(G.u) 
+
+figure
+mesh(G.child.u)
 
 % figure 
 % mesh(E);
