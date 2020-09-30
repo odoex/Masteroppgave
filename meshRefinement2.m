@@ -1,6 +1,6 @@
-% Number of points in space and time
-% For main grid m = 9
-m = 5;
+% Number of points in space and time for main grid
+m = 9;
+
 m_x = m;
 m_y = m;
 n = 10;
@@ -9,65 +9,41 @@ n = 10;
 t_0 = 0;
 t_n = 1;
 
-% time steps
+% time steps for coarse grid
 k = (t_n-t_0)/(n-1);
 
+% PDE coefficients and exact solution
 a = 0.5;
 b = 1;
 
-% Exact solution
 f = @(x,y,s) sin(x - a*s) + sin(y - b*s);
 
-% Grid creation (Ikke lagre i skriptet ovenfor)
+
+% Grid creation 
+
+% Coarse grid: 
 G = Node(0, [0,0,1,1], 1/(m-1), k, m, n);
 
 % Fine grid: 
-locx = 2;
-locy = 2;
-location_1 = [(locx-1)*G.h,(locy-1)*G.h,locx,locy];
+%   Area to be covered by fine grid: Ex locx = [a,b] where a<b
+locx = [3,5];
+locy = [3,5];
 ratio = 2;
-m_1 = 5;
 
-G_1 = Node(G, location_1, G.h/ratio, k/ratio, m_1, n);
+location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
+
+G_1 = Node(G, location_1, G.h/ratio, k/ratio, (locx(2)-locx(1))*ratio +1, n);
 G.child = G_1;
-% PROBLEM TIL I MORGEN: vil ikke lage node ut av G.child, setter den til null av en rar grunn
-% prøv å lage noden først, se hva den blir og så sette G.child til å være
-% den skapte node.
-% Resultat: Det går an å lage ny node og sette G.child til å være denne.
-% Dette er veldig rart. Aner ikke hvorfor matlab er sånn
 
 
 % Creating solution vectors
 G.u = createSolutionVector(G);
 G.child.u = createSolutionVector(G.child);
 
-% x = linspace(G.location(1),G.location(1) + (G.m-1)*G.h,G.m)';
-% y = linspace(G.location(2),G.location(2) + (G.m-1)*G.h,G.m)';
-% 
-% x1 = linspace(G_1.location(1),G_1.location(1) + (G_1.m-1)*G_1.h,G_1.m)';
-% y1 = linspace(G_1.location(2),G_1.location(2) + (G_1.m-1)*G_1.h,G_1.m)';
-% 
-% [X,Y] = meshgrid(x,y);
-% [X1,Y1] = meshgrid(x1,y1);
-
-% Initial and boundary conditions
-%F = sin(X) + sin(Y);
-
-%g_x = @(s,z) (sin(z-a*s) + sin(-b*s)); 
-%g_y = @(s,z) (sin(-a*s) + sin(z-b*s));
-
-% Initializing the solution U (skal lagres i grid)
-%U_n = F;
-
-t = t_0;%linspace(t_0,t_n,n);
-
-%U = finiteVolume(U,h,k,a,b,@(s) g_x(s,x),@(s) g_y(s,y),m_x,m_y,t_0,t_n);
-
-
-
-
-    
-    U = finiteVolume(G,a,b,t_0,t_n,f);
+t = t_0;
+   
+% Running the scheme: 
+U = finiteVolume(G,a,b,t_0,t_n,f);
     
 %     for i = 1:m_x
 %         for j = 1:m_y
@@ -99,11 +75,14 @@ disp(error);
 % figure 
 % mesh(sol);
 
-figure
-mesh(G.u) 
+[X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
+[X1,Y1] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
 
-figure
-mesh(G.child.u)
+%figure
+mesh(X,Y,G.u) 
+hold on
+%figure
+mesh(X1,Y1,G.child.u)
 
 % figure 
 % mesh(E);

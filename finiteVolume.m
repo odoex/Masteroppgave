@@ -1,34 +1,29 @@
 function [G] = finiteVolume(G,a,b,t_0,t_n,f)
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
-    %finiteVolume(G,a,b,g_x,g_y,t_0,t_n,f)
-    % G.t - tidssteget som sist ble regnet ut
+% finiteVolume Function running the finite volume scheme.
+%   This function takes a grid, a time interval and information about the
+%   advection PDE whose solution is to be approximated by the finite volume
+%   method. While still inside the time interval the solution is
+%   approximated at the current time step on the current grid G (starting
+%   at the coarsest grid) with Runge-Kutta 4. The time step for this grid
+%   is updated to the time it was last calculated. If this grid has a finer
+%   grid, the solution for this grid is recursively calculated with this
+%   method. 
     
-    t = t_0;  % t = 0, 0
-    if G.child ~= 0
-        disp(G.u)
-        disp(G.child.u)
-    end
+    t = t_0; 
 
-    while t <= (t_n-G.k) % t_n = k*n, 1, 1/2
-        u = RK_4(G,t,a,b,f);
+    while t <= (t_n-G.k)
         
-%         if (G.parent ~= 0)
-%             disp(u)
-%             figure
-%             mesh(u)
-%         end
-        %u = RK_4(G.u,t,G.h,G.k,a,b,g_x,g_y,G.m,G.m);
-        %G.u = RK_4(G.u,t,G.h,G.k,a,b,g_x,g_y,G.m,G.m); % regner ut ved tid t+k, 1, 1/2, 1/4, 1/2
-        G.t = t + G.k; % Kan puttes inn i en annen funksjon?
+        u = RK_4(G,t,a,b,f);
+        G.t = t + G.k; 
         
         if (G.child ~= 0)
-            G.child = finiteVolume(G.child,a,b,t_0,t+G.k,f); % tidssteget der det slapp ... Sjekk om det er riktig k
+            G.child = finiteVolume(G.child,a,b,t_0,t+G.k,f);
+            % Stops at t_n=t+G.k, where G.k is time step at parent grid 
             G = projectFlux(G,G.child);
         end
         
         G.u = u;
-        t = t + G.k; % 1/4, 1/2
+        t = t + G.k; 
     end
     
 end

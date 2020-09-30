@@ -1,10 +1,13 @@
 function [U] = rhs(U,t,a,b,f,G)
-%UNTITLED4 Summary of this function goes here
-%   Detailed explanation goes here
+% rhs calculates the right side of the equation
+%   Collecting the boundary vectors for the grid, the function loops
+%   through the grid and approximates the flux. Checking if the point is at
+%   the boundary, the function uses the boundary conditions to calculate
+%   the flux when at the boundary where boundary condition is needed, and
+%   adapts the method at the other boundaries (i = mx or j = my). The
+%   solution is inserted to a temporary solution array U_n and is returned
+%   in U after the loop is done. 
 
-    %rhs(U,t,a,b,f,m_x,m_y,h)
-
-    
     h = G.h;
     m_x = G.m;
     m_y = G.m;
@@ -18,7 +21,6 @@ function [U] = rhs(U,t,a,b,f,G)
         for j = 1:m_y
             
             if (i == 1)
-                %F_x(i,j) = - a*(U(i+1,j) - U(i,j))/h;
                 F_x(i,j) = - a*(U(i+1,j) - g_y(j))/h;
             elseif (i == m_x)
                 F_x(i,j) = - a*(U(i,j) - U(i-1,j))/h;
@@ -27,7 +29,6 @@ function [U] = rhs(U,t,a,b,f,G)
             end
 
             if (j == 1)
-                %F_y(i,j) = - b*(U(i,j+1) - U(i,j))/h;
                 F_y(i,j) = - b*(U(i,j+1) - g_x(i))/h;
             elseif (j == m_y)
                 F_y(i,j) = - b*(U(i,j) - U(i,j-1))/h;
