@@ -1,5 +1,5 @@
 % Number of points in space and time
-m = 9;
+m = 5;
 m_x = m;
 m_y = m;
 n = 10;
@@ -63,6 +63,7 @@ E = abs(U-sol');
 
 error = norm(E);
 disp(error)
+disp(E)
 
 % error = 0;
 % for i=1:m_x
@@ -80,7 +81,7 @@ disp(error)
 figure 
 mesh(sol);
 
-figure
+%figure
 mesh(U)
 %disp(U)
 figure 

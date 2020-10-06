@@ -1,4 +1,4 @@
-function [g_x,g_y] = boundary(G,f,t)
+function [g_x,g_y] = boundary_t(G,f,t)
 % boundart function that calculates the vectors placed at boundaries of
 % a grid. 
 %   Creates boundaries from the current solution vector from parent. (If
@@ -17,6 +17,8 @@ function [g_x,g_y] = boundary(G,f,t)
         r = G.parent.h/G.h; 
         g_x = zeros(G.m,1);
         g_y = zeros(G.m,1);
+        
+        %U = [G.parent.u,G.sibling.u];
         
         for i = 0:((G.m-1)/r)
             
@@ -43,6 +45,15 @@ function [g_x,g_y] = boundary(G,f,t)
             i=i+1;
         end
     end
+%     if G.parent ~= 0
+%         disp(G.parent.u)
+% 
+%         disp("Boundary: ")
+%         disp(g_x)
+%         disp(g_y)
+%     end
+    
+    
     
 end
 

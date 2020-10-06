@@ -15,7 +15,7 @@ function [U] = rhs(U,t,a,b,f,G)
     F_x = zeros(m_x);
     F_y = zeros(m_y);
     
-    [g_x,g_y] = boundary(G,f,t);
+    [g_x,g_y] = boundary_t(G,f,t);
 
     for i = 1:m_x
         for j = 1:m_y
