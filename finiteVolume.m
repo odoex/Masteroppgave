@@ -13,11 +13,11 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
 
     while floor(t*100000)/100000 < floor(t_n*100000)/100000
         
-        %u = RK_4(G,t,a,b,f); 
+        u = RK_4(G,t,a,b,f); 
         
         %
         G_n = Node(-1,G.location,G.h,G.k,G.n,G.m);
-        %G_n.u = u;
+        G_n.u = u;
         
         %
         
@@ -29,13 +29,13 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
             % Stops at t_n=t+G.k, where G.k is time step at parent grid 
             
             % Her må det skje noe mer hvis G skal ha flere undergrid 
-%             G.u = u;
+             G.u = u;
              G = projectFlux(G,G.child);
         else
-%             G.u = u;
+             G.u = u;
         end
         
-        G.u = RK_4(G,t,a,b,f); 
+%         G.u = RK_4(G,t,a,b,f); 
         
         t = t + G.k; 
         G.t = t;
@@ -51,10 +51,16 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
 %             if G.parent == 0
 %                 mesh(X,Y,(sin(X-a*t) + sin(Y-b*t))')
 %             end
-            mesh(X,Y,G.u) 
-            hold on
-            %mesh(X1,Y1,G.child.u)
-            pause
+
+%             mesh(X,Y,G.u)
+%             hold on
+%             pause
+            
+            
+%             mesh(X,Y,E)
+%             hold on 
+%             pause
+            
         %end
         
     end

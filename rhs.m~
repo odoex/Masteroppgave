@@ -38,16 +38,12 @@ function [U] = rhs(U,t,a,b,f,G)
                 F_y(i,j) = - b*(U(i,j+1) - U(i,j-1))/(2*h);
             end
 
-            
+            U_n = F_x + F_y;
             
         end
     end
-    
-    U_n = F_x + F_y;
-    
-    %U_n(:,1) = g_x;
-    %U_n(1,:) = g_y;
-    
+    U(:,1) = f()
+    U(1,:) = 
     
     U = U_n;
     
