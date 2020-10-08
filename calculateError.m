@@ -20,7 +20,7 @@ function [error] = calculateError(G,a,b)
     end
     
     
-
+    error = sqrt(error);
     
 end
 

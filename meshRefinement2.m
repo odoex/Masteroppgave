@@ -1,10 +1,15 @@
 % Number of points in space and time for main grid
-m = 17;
+m =5;
 m_x = m;
 m_y = m;
 n = 50;
 
 % Opdatere ved forrige eller neste tidssteg?
+% Spørsmål: Har virkelig randen (på det grove gridet) så mye å si at
+% metoden ikke får riktig konvergens dersom 
+
+% Neste steg: sjekk at konvergensen er riktig nå, før du går videre til å
+% finne ut av rand og mesh refinement. 
 
 % Intervals in time
 t_0 = 0;
@@ -88,8 +93,8 @@ interval = linspace(t_0,t_n,n);
 % [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
 % %[X1,Y1] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
 % 
-% mesh(X,Y,G.u) 
-% hold on
+ mesh(X,Y,G.u) 
+ hold on
 % %mesh(X1,Y1,G.child.u)
 
 

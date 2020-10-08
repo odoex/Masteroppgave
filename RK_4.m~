@@ -20,5 +20,10 @@ function [U] = RK_4(G,t,a,b,f)
     
     % Hvordan setter man inn randbetingelser direkte/uten å regne ut flux
     
+    % Husk: randbetingelsene er endret til å opdatere seg i tid med runge
+    % kutta. Sjekk hvordan dette påvirker de finere gridene og om koden må
+    % endres med tanke på deres rand. Der brukes ikke eksakt løsning slik
+    % den gjør i hovedgridet. 
+    
 end
 

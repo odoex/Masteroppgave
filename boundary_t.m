@@ -10,8 +10,8 @@ function [g_x,g_y] = boundary_t(G,f,t)
     y = G.location(4);
 
     if G.parent == 0
-        g_x = f(linspace(G.location(1),G.location(1)+G.h*(G.m-1),G.m),0,G.t)'; % Hva gjør jeg med tiden her?
-        g_y = f(0,linspace(G.location(2),G.location(2)+G.h*(G.m-1),G.m),G.t)'; % Hva gjør jeg med tiden her?
+        g_x = f(linspace(G.location(1),G.location(1)+G.h*(G.m-1),G.m),0,t)'; % Hva gjør jeg med tiden her?
+        g_y = f(0,linspace(G.location(2),G.location(2)+G.h*(G.m-1),G.m),t)'; % Hva gjør jeg med tiden her?
     else
         
         r = G.parent.h/G.h; 
