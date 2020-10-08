@@ -7,11 +7,8 @@ function [U] = RK_4(G,t,a,b,f)
     k2 = rhs(G.u + (G.k/2)*k1,t + G.k/2,a,b,f,G);
     k3 = rhs(G.u + (G.k/2)*k2,t + G.k/2,a,b,f,G);
     k4 = rhs(G.u + G.k*k3,t + G.k,a,b,f,G);
-    disp(k1)
-    disp(k2)
-    disp(k3)
-    disp(k4)
-    [g_x,g_y] = boundary_t(G,f,t);
+    
+    %[g_x,g_y] = boundary_t(G,f,t);
     
     U = G.u + (G.k/6)*(k1 + 2*k2 + 2*k3 + k4);
 
@@ -19,6 +16,11 @@ function [U] = RK_4(G,t,a,b,f)
 %     U(1,:) = g_y;
     
     % Hvordan setter man inn randbetingelser direkte/uten å regne ut flux
+    
+    % Husk: randbetingelsene er endret til å opdatere seg i tid med runge
+    % kutta. Sjekk hvordan dette påvirker de finere gridene og om koden må
+    % endres med tanke på deres rand. Der brukes ikke eksakt løsning slik
+    % den gjør i hovedgridet. 
     
 end
 

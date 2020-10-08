@@ -52,9 +52,10 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
 %                 mesh(X,Y,(sin(X-a*t) + sin(Y-b*t))')
 %             end
 
-%             mesh(X,Y,G.u)
-%             hold on
-%             pause
+            mesh(X,Y,G.u)
+            %zlim([-2 2])
+            hold on
+            pause
             
             
 %             mesh(X,Y,E)
