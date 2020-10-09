@@ -6,7 +6,8 @@
 % finne ut av rand og mesh refinement. 
 
 % 2. Sjekk konvergens på det fine gridet med bcs fra det grove gridet. 
-% - tror først
+% - tror først det blir veldig nøyaktig sammenlignet med det første (ingen
+% forfining), ettersom 
 
 % 3. Sjekk om boundary conditions er riktige (sjekk i det hele tatt ut litt
 % om boundary conditions). Denne settes på pause ettersom riktig konvergens
@@ -50,7 +51,7 @@ h=G.h;
 %   Area to be covered by fine grid: Ex locx = [a,b] where a<b
 locx = [2,4];
 locy = [2,4];
-ratio = 16;
+ratio = 3;
 
 location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
 
@@ -66,16 +67,16 @@ end
 
 figure
    
-% [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1)); 
-% mesh(X,Y,G.u) 
-% hold on
+[X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1)); 
+mesh(X,Y,G.u) 
+hold on
 
 
 % Running the scheme: 
 G = finiteVolume(G,a,b,t_0,t_n,f);
 
 
-error = calculateError(G.child,a,b);
+error = calculateError(G,a,b);
 %error1 = calculateError(G.child);
 
 % Exact solution
@@ -87,8 +88,8 @@ error = calculateError(G.child,a,b);
 
 %E = abs(U-sol');
 % error = norm(E);
-disp(error);
-disp(G.h);
+ disp(error);
+% disp(G.h);
 
 figure
 
@@ -110,11 +111,11 @@ interval = linspace(t_0,t_n,n);
 % %[X1,Y1] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
 % 
  %mesh(X,Y,G.u)
- [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
- mesh(X,Y,G.u)
- hold on
+%  [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
+%  mesh(X,Y,G.u)
+%  hold on
 % %mesh(X1,Y1,G.child.u)
 
-disp(G.child.h)
+%disp(G.child.h)
 % figure 
 % mesh(E);

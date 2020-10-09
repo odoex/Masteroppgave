@@ -1,5 +1,5 @@
 % Number of points in space and time
-m = 5;
+m = 5;%4*3+1;
 m_x = m;
 m_y = m;
 n = 50;
@@ -42,17 +42,20 @@ t = linspace(t_0,t_n,n);
 for i = 1:(n-1)
     
     U = RK_ny(U,t(i),h,k,a,b,g_x,g_y,m_x,m_y);
-    
+%     disp(sin(X(4:10,4:10) - a*t(i+1)) + sin(Y(4:10,4:10) - b*t(1+i)))
+%     disp(U(4:10,4:10))
+%     disp(abs(U(4:10,4:10)- sin(X(4:10,4:10) - a*t(1+i)) - sin(Y(4:10,4:10) - b*t(i+1))))
+    disp(U(2:4,2:4))
 %     if i == 1
 %         disp(U)
-%     end
+%     end 
     
     %U(1,:) = sin(-a*t(i+1)) + sin(y-b*t(i+1));
     %U(:,1) = sin(x-a*t(i+1)) + sin(-b*t(i+1));
     
 %      disp(U)
 %      disp(ex_sol(t(i+1))')
-    
+   break
 end
 
 % Exact solution

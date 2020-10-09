@@ -30,7 +30,7 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
             
             % Her må det skje noe mer hvis G skal ha flere undergrid 
              G.u = u;
-             %G = projectFlux(G,G.child);
+             G = projectFlux(G,G.child);
         else
              G.u = u;
         end
@@ -40,7 +40,7 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
         t = t + G.k; 
         G.t = t;
         
-        disp(G.u)    
+        %disp(G.u)    
         %if G.parent ~= 0
             [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
             %[X1,Y1] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
@@ -48,20 +48,24 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
             %disp(t)
             %disp(E)
             
-%             if G.parent == 0
+            if G.parent ~= 0
+%                 disp((sin(X-a*t) + sin(Y-b*t)))
+                disp(G.parent.u)
+                disp(G.u)
+                disp(abs((sin(X-a*t) + sin(Y-b*t))'-G.u))
 %                 mesh(X,Y,(sin(X-a*t) + sin(Y-b*t))')
-%             end
+            end
 
-            mesh(X,Y,G.u)
-            %zlim([-2 2])
-            hold on
-            pause
+%             mesh(X,Y,G.u)
+%             %zlim([-2 2])
+%             hold on
+%             pause
             
             
 %             mesh(X,Y,E)
 %             hold on 
 %             pause
-            
+            break
         %end
         
     end
