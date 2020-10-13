@@ -13,7 +13,7 @@ function [U] = RK_ny(U,t,h,k,a,b,g_x,g_y,m_x,m_y)
     
     U = U + (k/6)*(k1 + 2*k2 + 2*k3 + k4);
     
-%      disp(k1)
+%       disp(k1)
 %      disp(k2)
 %     disp(k3)
 %     disp(k4)

@@ -25,10 +25,10 @@ t_n = 1;
 t = t_0;
 
 % Number of points in space and time for main grid
-m = 17;
+m = 5;
 m_x = m;
 m_y = m;
-n = 2*m*3*t_n; 
+n = 500*t_n; % Avhengig av m
 
 % time steps for coarse grid
 k = (t_n-t_0)/(n-1);
@@ -49,9 +49,9 @@ h=G.h;
 
 % Fine grid: 
 %   Area to be covered by fine grid: Ex locx = [a,b] where a<b
-locx = [2,14];
-locy = [2,14];
-ratio = 3;
+locx = [2,4];
+locy = [2,4];
+ratio = 24;
 
 location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
 
@@ -81,7 +81,7 @@ G = finiteVolume(G,a,b,t_0,t_n,f);
 
 % disp(G.u)
 
-error = calculateError(G,a,b);
+error = calculateError(G.child,a,b);
 %error1 = calculateError(G.child);
 
 % Exact solution
@@ -120,3 +120,7 @@ interval = linspace(t_0,t_n,n);
 %  mesh(X,Y,G.u)
 %  hold on
 % %mesh(X1,Y1,G.child.u)
+
+%disp(G.child.h)
+% figure 
+% mesh(E);

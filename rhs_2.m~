@@ -4,11 +4,11 @@ function [U] = rhs_2(U,t,h,a,b,g_x,g_y,m_x,m_y)
 
     %rhs(U,t,a,b,f,m_x,m_y,h)
 
-%     x=1:m_x;
-%     y=1:m_y;
-%     disp(g_x(t,x))
-%     disp(g_y(t,y))
-%     disp(t)
+    x=1:m_x;
+    y=1:m_y;
+    disp(g_x(t,x))
+    disp(g_y(t,y))
+    disp(t)
     
     F_x = zeros(m_x);
     F_y = zeros(m_y);
@@ -19,9 +19,9 @@ function [U] = rhs_2(U,t,h,a,b,g_x,g_y,m_x,m_y)
             if (i == 1)
                 
                 
-%                     disp(U(i+1,j))
-%                     disp(g_y(t,j))
-%                     disp(h)
+                    disp(U(i+1,j))
+                    disp(g_y(t,j))
+                    disp(h)
                 
                 
                 %F_x(i,j) = - a*(U(i+1,j) - U(i,j))/h;
@@ -42,9 +42,9 @@ function [U] = rhs_2(U,t,h,a,b,g_x,g_y,m_x,m_y)
             end
 
             U_n = F_x + F_y;
-            
-%             disp(U_n)
-            
+            if i > 2 && i < 8 && j > 2 && j < 8
+                disp(U_n)
+            end
         end
     end
     

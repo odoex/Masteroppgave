@@ -8,6 +8,11 @@ function [U] = RK_4(G,t,a,b,f)
     k3 = rhs(G.u + (G.k/2)*k2,t + G.k/2,a,b,f,G);
     k4 = rhs(G.u + G.k*k3,t + G.k,a,b,f,G);
     
+%     if G.parent ~= 0
+%         disp(k1)
+%         
+%     end
+    
     %[g_x,g_y] = boundary_t(G,f,t);
     
     U = G.u + (G.k/6)*(k1 + 2*k2 + 2*k3 + k4);

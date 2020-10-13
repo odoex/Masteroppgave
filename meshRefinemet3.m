@@ -1,14 +1,18 @@
 % Number of points in space and time
-m = 5;%4*3+1;
+m = 17; 
 m_x = m;
 m_y = m;
 n = 50;
 
 % Intervals in space and time
-x_0 = 0;
-x_m = 1;
-y_0 = 0;
-y_m = 1;
+%x_0 = 0;
+x_0 = 0.25;
+% x_m = 1;
+x_m=0.75;
+% y_0 = 0;
+y_0=0.25;
+% y_m = 1;
+y_m=0.75;
 t_0 = 0;
 t_n = 1;
 
@@ -17,9 +21,14 @@ h = (x_m-x_0)/(m-1);
 k = (t_n-t_0)/(n-1);
 
 % Grid creation (Ikke lagre i skriptet ovenfor)
+%G = Node(0, [0.25,0.25], 0.125/2, k, m, n);
 G = Node(0, [x_0,y_0], h, k, m, n);
 x = linspace(G.location(1),G.location(1) + (G.m-1)*G.h,G.m)';
 y = linspace(G.location(2),G.location(2) + (G.m-1)*G.h,G.m)';
+
+%
+h=G.h;
+%
 
 [X,Y] = meshgrid(x,y);
 
@@ -38,14 +47,14 @@ U = F;
 %disp(U)
 t = linspace(t_0,t_n,n);
 
-
+disp(U)
 for i = 1:(n-1)
     
     U = RK_ny(U,t(i),h,k,a,b,g_x,g_y,m_x,m_y);
 %     disp(sin(X(4:10,4:10) - a*t(i+1)) + sin(Y(4:10,4:10) - b*t(1+i)))
 %     disp(U(4:10,4:10))
 %     disp(abs(U(4:10,4:10)- sin(X(4:10,4:10) - a*t(1+i)) - sin(Y(4:10,4:10) - b*t(i+1))))
-    disp(U(2:4,2:4))
+%     disp(U)
 %     if i == 1
 %         disp(U)
 %     end 
@@ -53,10 +62,12 @@ for i = 1:(n-1)
     %U(1,:) = sin(-a*t(i+1)) + sin(y-b*t(i+1));
     %U(:,1) = sin(x-a*t(i+1)) + sin(-b*t(i+1));
     
-%      disp(U)
+     disp(U)
 %      disp(ex_sol(t(i+1))')
-   break
+%    break
 end
+
+disp(U)
 
 % Exact solution
 sol = sin(X - a*t_n) + sin(Y - b*t_n);

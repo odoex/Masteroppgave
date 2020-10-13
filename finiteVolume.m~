@@ -65,7 +65,7 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
 %             mesh(X,Y,E)
 %             hold on 
 %             pause
-%             break
+            break
         %end
         
     end
