@@ -16,25 +16,12 @@ function [U] = rhs(U,t,a,b,f,G)
     F_y = zeros(m_y);
     
     [g_x,g_y] = boundary_t(G,f,t);
-    
-%      if G.parent ~= 0
-%         disp(g_x)
-%         disp(g_y)
-%         disp(t)
-%           c=h;
-%      end
 
     for i = 1:m_x
         for j = 1:m_y
             
             if (i == 1)
-%                 if G.parent ~= 0
-%                     disp(U(i+1,j))
-%                     disp(g_y(j))
-%                     disp(h)
-%                 end
                 F_x(i,j) = - a*(U(i+1,j) - g_y(j))/h;
-                %F_x(i,j)=-g_y(j);
             elseif (i == m_x)
                 F_x(i,j) = - a*(U(i,j) - U(i-1,j))/h;
             else
@@ -43,24 +30,16 @@ function [U] = rhs(U,t,a,b,f,G)
 
             if (j == 1)
                 F_y(i,j) = - b*(U(i,j+1) - g_x(i))/h;
-                %F_y(i,j) = -g_x(i);
             elseif (j == m_y)
                 F_y(i,j) = - b*(U(i,j) - U(i,j-1))/h;
             else
                 F_y(i,j) = - b*(U(i,j+1) - U(i,j-1))/(2*h);
             end
-%             if G.parent ~= 0
-%                 disp(F_x + F_y)
-%             end
             
         end
     end
     
     U_n = F_x + F_y;
-    
-    %U_n(:,1) = g_x;
-    %U_n(1,:) = g_y;
-    
     
     U = U_n;
     

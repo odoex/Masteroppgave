@@ -11,62 +11,30 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
     
     t = t_0; 
 
-    while floor(t*100000)/100000 < floor(t_n*100000)/100000
+     while abs(t_n-t) > 1e-08
         
         u = RK_4(G,t,a,b,f); 
         
-        %
-        G_n = Node(-1,G.location,G.h,G.k,G.n,G.m);
-        G_n.u = u;
-        
-        %
-        
         if (G.child ~= 0)
-            %
-            G.child.sibling = G_n;
-            %
+          
             G.child = finiteVolume(G.child,a,b,t,t+G.k,f);
             % Stops at t_n=t+G.k, where G.k is time step at parent grid 
             
             % Her må det skje noe mer hvis G skal ha flere undergrid 
              G.u = u;
-             G = projectFlux(G,G.child);
+%              G = projectFlux(G,G.child);
         else
              G.u = u;
         end
         
-%         G.u = RK_4(G,t,a,b,f); 
-        
         t = t + G.k; 
         G.t = t;
-        
-        %disp(G.u)    
-        %if G.parent ~= 0
-            [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
-            %[X1,Y1] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
-            E = abs((sin(X-a*t) + sin(Y-b*t))'-G.u);
-            %disp(t)
-            %disp(E)
             
-            if G.parent ~= 0
-%                 disp((sin(X-a*t) + sin(Y-b*t)))
-%                 disp(G.parent.u)
+%         if (G.child ~= 0)
+%             if t <= G.k*1
 %                 disp(G.u)
-%                 disp(abs((sin(X-a*t) + sin(Y-b*t))'-G.u))
-%                 mesh(X,Y,(sin(X-a*t) + sin(Y-b*t))')
-            end
-
-%             mesh(X,Y,G.u)
-%             %zlim([-2 2])
-%             hold on
-%             pause
-            
-            
-%             mesh(X,Y,E)
-%             hold on 
-%             pause
-%             break
-        %end
+%             end
+%         end
         
     end
     

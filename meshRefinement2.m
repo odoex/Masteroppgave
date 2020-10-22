@@ -2,22 +2,21 @@
 % Spørsmål: Har virkelig randen (på det grove gridet) så mye å si at
 % metoden ikke får riktig konvergens dersom 
 
-% 1. sjekk at konvergensen er riktig nå, før du går videre til å
-% finne ut av rand og mesh refinement. 
+% 1. Konvergens for grovt grid gitt i convergence2.mat er 2
 
-% 2. Sjekk konvergens på det fine gridet med bcs fra det grove gridet. 
-% - tror først det blir veldig nøyaktig sammenlignet med det første (ingen
-% forfining), ettersom 
+% 2. Konvergens på fint grid er ikke kontstant. Først stor og minker
+% deretter. 
+% - først veldig nøyaktig sammenlignet med ingen forfining, deretter har
+% forfiningen mindre å si ettersom det ikke kommer ny informasjon. Verdiene
+% som ligger rundt er bare nøyaktig til en viss grad. 
 
-% 3. Sjekk om boundary conditions er riktige (sjekk i det hele tatt ut litt
-% om boundary conditions). Denne settes på pause ettersom riktig konvergens
-% er oppnådd med de eksisterende bcs. (Finn ut hva det vil si at de ikke
-% opdaterer seg. Lær også litt mer om hvordan stabilitenen påvirkes rundt
-% dette.
+% 3. Boundary coditions stemmer. Selv med eksakte bcs har det fine gridet
+% dårlig konvergens på det indre av det store gridet. Dersom det strekkes
+% ut i kantene har det konvergens 2.  (Finn ut hva det vil si at de ikke
+% opdaterer seg. Sjekk også litt mer om hvordan stabilitenen påvirkes rundt
+% dette.)
 
-% 4. Endre metoden til å ikke ta med videre boundary fra fint grid. (Gir
-% mening å ikke ta med denne, men skjønner fortsatt ikke helt hvorfor den
-% ble helt shit når jeg gjorde det).
+
 
 % Intervals in time
 t_0 = 0;
@@ -25,7 +24,7 @@ t_n = 1;
 t = t_0;
 
 % Number of points in space and time for main grid
-m = 17;
+m = 9;
 m_x = m;
 m_y = m;
 n = 2*m*3*t_n; 
@@ -49,9 +48,9 @@ h=G.h;
 
 % Fine grid: 
 %   Area to be covered by fine grid: Ex locx = [a,b] where a<b
-locx = [2,14];
-locy = [2,14];
-ratio = 3;
+locx = [3,7]; % Correct: this should be decided by location in interval
+locy = [3,7];
+ratio = 2;
 
 location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
 
@@ -67,56 +66,29 @@ if G.child ~= 0
 end
 
 
+% Plotting the function
 
 figure
-   
 [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1)); 
-mesh(X,Y,G.u) 
+mesh(X,Y,G.u)
+hold on
+[X,Y] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
+mesh(X,Y,G.child.u)
 hold on
 
-disp(G.child.u)
 
 % Running the scheme: 
 G = finiteVolume(G,a,b,t_0,t_n,f);
 
-% disp(G.u)
+disp(G.u)
+disp(G.t)
 
+%Calculating the error
 error = calculateError(G,a,b);
-%error1 = calculateError(G.child);
 
-% Exact solution
-%sol = sin(X - a*t_n) + sin(Y - b*t_n);
+disp(error);
 
-
-%disp(U);
-%disp(sol);
-
-%E = abs(U-sol');
-% error = norm(E);
- disp(error);
-% disp(G.h);
-
-figure
-
+% figure
 [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
 interval = linspace(t_0,t_n,n);
-% for i = 1:length(interval)
-%     mesh((sin(X-a*interval(i)) + sin(Y-b*interval(i)))');
-%     zlim([-2 2])
-%     %hold on
-%     pause
-% end
 
-% Plot exact solution and approximated solution
-% figure 
-% mesh(sol);
-
-
-% [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
-% %[X1,Y1] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
-% 
- %mesh(X,Y,G.u)
-%  [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
-%  mesh(X,Y,G.u)
-%  hold on
-% %mesh(X1,Y1,G.child.u)

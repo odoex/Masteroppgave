@@ -17,6 +17,7 @@ function [g_x,g_y] = boundary_t(G,f,t)
         r = G.parent.h/G.h; 
         g_x = zeros(G.m,1);
         g_y = zeros(G.m,1);
+       
         
         for i = 0:((G.m-1)/r)
             
@@ -42,7 +43,20 @@ function [g_x,g_y] = boundary_t(G,f,t)
             end
             i=i+1;
         end
+        %
+        %
+        %g_x=-g_x;
+        %g_y=-g_y;
+        %
+        %
     end
+%     if G.parent ~= 0
+%         disp(G.parent.u)
+% 
+%         disp("Boundary: ")
+%         disp(g_x)
+%         disp(g_y)
+%     end
     
     
     

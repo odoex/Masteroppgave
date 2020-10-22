@@ -1,18 +1,14 @@
 % Number of points in space and time
-m = 17; 
+m = 9; 
 m_x = m;
 m_y = m;
-n = 50;
+n = 54;
 
 % Intervals in space and time
-%x_0 = 0;
-x_0 = 0.25;
-% x_m = 1;
-x_m=0.75;
-% y_0 = 0;
-y_0=0.25;
-% y_m = 1;
-y_m=0.75;
+x_0 = 0;
+x_m = 1;
+y_0 = 0;
+y_m = 1;
 t_0 = 0;
 t_n = 1;
 
@@ -61,13 +57,15 @@ for i = 1:(n-1)
     
     %U(1,:) = sin(-a*t(i+1)) + sin(y-b*t(i+1));
     %U(:,1) = sin(x-a*t(i+1)) + sin(-b*t(i+1));
-    
-     disp(U)
+%     if i <= 1
+%         disp(U)
+%     end
 %      disp(ex_sol(t(i+1))')
 %    break
 end
 
 disp(U)
+disp(t(i))
 
 % Exact solution
 sol = sin(X - a*t_n) + sin(Y - b*t_n);
