@@ -1,4 +1,4 @@
-function [U] = rhs(U,t,a,b,f,G)
+function [u] = rhs(u,t,G)
 % rhs calculates the right side of the equation
 %   Collecting the boundary vectors for the grid, the function loops
 %   through the grid and approximates the flux. Checking if the point is at
@@ -15,33 +15,41 @@ function [U] = rhs(U,t,a,b,f,G)
     F_x = zeros(m_x);
     F_y = zeros(m_y);
     
-    [g_x,g_y] = boundary_t(G,f,t);
+    [p_x,p_y] = boundary(G,t);
+    px = zeros(1,length(p_x),4);
+    py = zeros(1,length(p_y),4);
+    px(1,:,:) = p_x;
+    py(1,:,:) = p_y; % Fiks dette rotet
+    f_px = g(px);
+    f_py = f(py); % Vektor form i stede for elementvis. Er dette lurt?
+    
+    U_f = f(u);
+    U_g = g(u);
+    
+    for l = 1:4
+        for i = 1:m_x
+            for j = 1:m_y
 
-    for i = 1:m_x
-        for j = 1:m_y
-            
-            if (i == 1)
-                F_x(i,j) = - a*(U(i+1,j) - g_y(j))/h;
-            elseif (i == m_x)
-                F_x(i,j) = - a*(U(i,j) - U(i-1,j))/h;
-            else
-                F_x(i,j) = - a*(U(i+1,j) - U(i-1,j))/(2*h);
-            end
+                if (i == 1)
+                    F_x(i,j) = (U_f(i+1,j,l) - f_py(1,j,l))/h; % Important to have correct sign for boundary value. This is not longer given by this function
+                elseif (i == m_x)
+                    F_x(i,j) = (U_f(i,j,l) - U_f(i-1,j,l))/h;
+                else
+                    F_x(i,j) = (U_f(i+1,j,l) - U_f(i-1,j,l))/(2*h);
+                end
 
-            if (j == 1)
-                F_y(i,j) = - b*(U(i,j+1) - g_x(i))/h;
-            elseif (j == m_y)
-                F_y(i,j) = - b*(U(i,j) - U(i,j-1))/h;
-            else
-                F_y(i,j) = - b*(U(i,j+1) - U(i,j-1))/(2*h);
+                if (j == 1)
+                    F_y(i,j) = (U_g(i,j+1,l) - f_px(1,i,l))/h;
+                elseif (j == m_y)
+                    F_y(i,j) = (U_g(i,j,l) - U_g(i,j-1,l))/h;
+                else
+                    F_y(i,j) = (U_g(i,j+1,l) - U_g(i,j-1,l))/(2*h);
+                end
+
             end
-            
         end
+        u(:,:,l) = F_x + F_y;
     end
-    
-    U_n = F_x + F_y;
-    
-    U = U_n;
-    
-end
+        
 
+end

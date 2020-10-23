@@ -13,20 +13,6 @@ n = 2*m*3*t_n;
 k = (t_n-t_0)/(n-1);
 
 
-
-%%%%%%%%%%%%
-
-
-% PDE coefficients and exact solution
-a = 0.5;
-b = 1;
-
-f = @(x,y,s) sin(x - a*s) + sin(y - b*s);
-
-%%%%%%%%%%%
-
-
-
 % GRID CREATION
 
 % Coarse grid: 
@@ -36,15 +22,15 @@ h=G.h;
 
 % Fine grid: 
 %   Area to be covered by fine grid: Ex locx = [a,b] where a<b
-locx = [3,7]; % Correct: this should be decided by location in interval
-locy = [3,7];
-ratio = 2;
-
-location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
-
-G_1 = Node(G, location_1, G.h/ratio, k, (locx(2)-locx(1))*ratio +1, n);
-G_1.t = 0;
-G.child = G_1;
+% locx = [3,7]; % Correct: this should be decided by location in interval
+% locy = [3,7];
+% ratio = 2;
+% 
+% location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
+% 
+% G_1 = Node(G, location_1, G.h/ratio, k, (locx(2)-locx(1))*ratio +1, n);
+% G_1.t = 0;
+% G.child = G_1;
 
 
 % SOLUTION VECTORS
@@ -63,7 +49,7 @@ end
 % [X,Y] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
 % mesh(X,Y,G.child.u)
 % hold on
-
+figure
 
 % Running the scheme: 
 G = finiteVolume(G,t_0,t_n);
@@ -72,9 +58,9 @@ disp(G.u)
 disp(G.t)
 
 %Calculating the error
-error = calculateError(G,a,b);
+%error = calculateError(G,a,b);
 
-disp(error);
+%disp(error);
 
 % figure
 [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));

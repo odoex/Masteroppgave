@@ -1,4 +1,4 @@
-function [g_x,g_y] = boundary_t(G,f,t)
+function [g_x,g_y] = boundaryAdv(G,f,t)
 % boundart function that calculates the vectors placed at boundaries of
 % a grid. 
 %   Creates boundaries from the current solution vector from parent. (If

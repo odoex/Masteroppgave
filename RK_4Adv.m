@@ -1,4 +1,4 @@
-function [U] = eRK4(G,t)
+function [U] = RK_4Adv(G,t,a,b,f)
 % RK_4 function for approximation with Runge-Kutta 4
 %   Using Runge-Kutta 4 to calculate the given time step in the method from
 %   time t to time t + k. 
@@ -22,3 +22,4 @@ function [U] = eRK4(G,t)
     % den gjør i hovedgridet. 
     
 end
+

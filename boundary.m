@@ -1,4 +1,4 @@
-function [g_x,g_y] = boundary(G,f,t)
+function [g_x,g_y] = boundary(G,t)
 % boundart function that calculates the vectors placed at boundaries of
 % a grid. 
 %   Creates boundaries from the current solution vector from parent. (If
@@ -10,86 +10,40 @@ function [g_x,g_y] = boundary(G,f,t)
     y = G.location(4);
 
     if G.parent == 0
-        g_x = f(linspace(G.location(1),G.location(1)+G.h*(G.m-1),G.m),0,t)'; 
-        g_y = f(0,linspace(G.location(2),G.location(2)+G.h*(G.m-1),G.m),t)';
+        g_x = boundaryValuesEuler(linspace(G.location(1),G.location(1)+G.h*(G.m-1),G.m),0,t); % Hva gjør jeg med tiden her?
+        g_y = boundaryValuesEuler(0,linspace(G.location(2),G.location(2)+G.h*(G.m-1),G.m),t); % Hva gjør jeg med tiden her?
     else
         
         r = G.parent.h/G.h; 
-        g_x = zeros(G.m,2);
-        g_y = zeros(G.m,2);
+        g_x = zeros(G.m,1);
+        g_y = zeros(G.m,1);
         
-        %U = [G.parent.u,G.sibling.u];
-        
-        for j = 1:2
-        %if c = (t2-t1)/(G.k)
-        %    t1 + (t2-t1)/
+        for i = 0:((G.m-1)/r)
             
-            if j==1
-                U=G.parent.u;
-            else
-                U=G.sibling.u;
-            end
-        
-            for i = 0:((G.m-1)/r)
-            
-                g_x(i*r+1,j) = U(x+i,y);
-                g_y(i*r+1,j) = U(x,y+i);
-%                 g_x(i*r+1,j) = G.parent.u(x+i,y);
-%                 g_y(i*r+1,j) = G.parent.u(x,y+i);
-            
-            end
-
-            i=2;
-            gx=[g_x(1,j),g_x(1+r,j)];
-            gy=[g_y(1,j),g_y(1+r,j)];
-
-            while i < G.m
-                s = mod(i-1,r);
-
-                g_x(i,j) = ((r-s)*gx(1) + s*gx(2))/r;
-                g_y(i,j) = ((r-s)*gy(1) + s*gy(2))/r;
-
-                if (s == r-1) && (i+r+1 <= G.m)
-                    gx = [gx(2),g_x(i+r+1,j)];
-                    gy = [gy(2),g_y(i+r+1,j)];
-                    i=i+1;
-                end
-                i=i+1;
-            end
+            g_x(i*r+1) = G.parent.u(x+i,y);
+            g_y(i*r+1) = G.parent.u(x,y+i);
             
         end
-        %c = (t-G.parent.t)/(G.k);
-        c = (t-G.parent.t)/G.parent.k;
-        g_x = g_x(:,1) + (g_x(:,2)-g_x(:,1))*c;
-        g_y = g_y(:,1) + (g_y(:,2)-g_y(:,1))*c;
-%         g_x = ((r-c).*g_x(:,1)-c.*g_x(:,2))/r;
-%         g_y = ((r-c).*g_y(:,1)-c.*g_y(:,2))/r;
         
-%         for i = 0:((G.m-1)/r)
-%             
-%             g_x(i*r+1) = G.parent.u(x+i,y);
-%             g_y(i*r+1) = G.parent.u(x,y+i);
-%             
-%         end
-%         
-%         i=2;
-%         gx=[g_x(1),g_x(1+r)];
-%         gy=[g_y(1),g_y(1+r)];
-%         
-%         while i < G.m
-%             s = mod(i-1,r);
-%             
-%             g_x(i) = ((r-s)*gx(1) + s*gx(2))/r;
-%             g_y(i) = ((r-s)*gy(1) + s*gy(2))/r;
-%             
-%             if (s == r-1) && (i+r+1 <= G.m)
-%                 gx = [gx(2),g_x(i+r+1)];
-%                 gy = [gy(2),g_y(i+r+1)];
-%                 i=i+1;
-%             end
-%             i=i+1;
-%         end
+        i=2;
+        gx=[g_x(1),g_x(1+r)];
+        gy=[g_y(1),g_y(1+r)];
+        
+        while i < G.m
+            s = mod(i-1,r);
+            
+            g_x(i) = ((r-s)*gx(1) + s*gx(2))/r;
+            g_y(i) = ((r-s)*gy(1) + s*gy(2))/r;
+            
+            if (s == r-1) && (i+r+1 <= G.m)
+                gx = [gx(2),g_x(i+r+1)];
+                gy = [gy(2),g_y(i+r+1)];
+                i=i+1;
+            end
+            i=i+1;
+        end
     end
     
+    
+    
 end
-

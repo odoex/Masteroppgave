@@ -78,7 +78,7 @@ hold on
 
 
 % Running the scheme: 
-G = finiteVolume(G,a,b,t_0,t_n,f);
+G = finiteVolumeAdv(G,a,b,t_0,t_n,f);
 
 disp(G.u)
 disp(G.t)
