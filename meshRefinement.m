@@ -1,73 +1,81 @@
-% Number of points in space and time
-m = 20;
-m_x = m;
-m_y = m;
-n = 2000;
-
-% Intervals in space and time
-x_0 = 0;
-x_m = 1;
-y_0 = 0;
-y_m = 1;
+% Intervals in time
 t_0 = 0;
 t_n = 1;
+t = t_0;
 
-% Space and time steps
-h = (x_m-x_0)/(m-1);
+% Number of points in space and time for main grid
+m = 9;
+m_x = m;
+m_y = m;
+n = 2*m*3*t_n; 
+
+% time steps for coarse grid
 k = (t_n-t_0)/(n-1);
 
-% Grid creation (Ikke lagre i skriptet ovenfor)
-G = Node(0, [x_0,y_0], h, k, m, n);
-x = linspace(G.location(1),G.location(1) + (G.m-1)*G.h,G.m)';
-y = linspace(G.location(2),G.location(2) + (G.m-1)*G.h,G.m)';
 
-[X,Y] = meshgrid(x,y);
 
+%%%%%%%%%%%%
+
+
+% PDE coefficients and exact solution
 a = 0.5;
 b = 1;
 
-% Initial and boundary conditions
-F = sin(X) + sin(Y);
+f = @(x,y,s) sin(x - a*s) + sin(y - b*s);
 
-g_x = @(s,z) (sin(z-a*s) + sin(-b*s)); 
-g_y = @(s,z) (sin(-a*s) + sin(z-b*s));
+%%%%%%%%%%%
 
-% Initializing the solution U (skal lagres i grid)
-U = F;
-U_n = F;
 
-t = t_0;
 
-while t <= t_n
-    for i = 1:m_x
-        for j = 1:m_y
-            gx = g_x(t,x(i));
-            gy = g_y(t,y(j));
-            
-            U_n(i,j) = RK(U,i,j,h,k,a,b,g_x(t,x),g_y(t,y),m_x,m_y);
-        end 
-    end
-    U = U_n;
-    t = t + k;
+% GRID CREATION
+
+% Coarse grid: 
+G = Node(0, [0,0,1,1], 1/(m-1), k, m, n);
+G.t=0;
+h=G.h;
+
+% Fine grid: 
+%   Area to be covered by fine grid: Ex locx = [a,b] where a<b
+locx = [3,7]; % Correct: this should be decided by location in interval
+locy = [3,7];
+ratio = 2;
+
+location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
+
+G_1 = Node(G, location_1, G.h/ratio, k, (locx(2)-locx(1))*ratio +1, n);
+G_1.t = 0;
+G.child = G_1;
+
+
+% SOLUTION VECTORS
+G.u = initialConditionsEuler(G); % Change with equation
+if G.child ~= 0
+    G.child.u = initialConditionsEuler(G.child);
 end
 
-% Exact solution
-sol = sin(X - a*t_n) + sin(Y - b*t_n);
+
+% Plotting the function .. this requires four plots 
+
+% figure
+% [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1)); 
+% mesh(X,Y,G.u)
+% hold on
+% [X,Y] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m-1));
+% mesh(X,Y,G.child.u)
+% hold on
 
 
-%disp(U);
-%disp(sol);
+% Running the scheme: 
+G = finiteVolume(G,t_0,t_n);
 
-E = abs(U-sol');
-error = norm(E);
+disp(G.u)
+disp(G.t)
+
+%Calculating the error
+error = calculateError(G,a,b);
+
 disp(error);
 
-% Plot exact solution and approximated solution
-figure 
-mesh(sol);
-
-figure
-mesh(U)
-
-figure 
-mesh(E);
+% figure
+[X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m-1));
+interval = linspace(t_0,t_n,n);

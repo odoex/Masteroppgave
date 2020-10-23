@@ -1,4 +1,4 @@
-function [G] = finiteVolume(G,a,b,t_0,t_n,f)
+function [G] = eFiniteVolume(G,t_0,t_n) % Sjekk om det kun er parametrene som er anderledes
 % finiteVolume Function running the finite volume scheme.
 %   This function takes a grid, a time interval and information about the
 %   advection PDE whose solution is to be approximated by the finite volume
@@ -7,36 +7,29 @@ function [G] = finiteVolume(G,a,b,t_0,t_n,f)
 %   at the coarsest grid) with Runge-Kutta 4. The time step for this grid
 %   is updated to the time it was last calculated. If this grid has a finer
 %   grid, the solution for this grid is recursively calculated with this
-%   method. 
+%   method.  
     
-    t = t_0; 
+    t = t_0;
 
-     while floor(t*100000)/100000 < floor(t_n*100000)/100000
+     while abs(t_n-t) > 1e-08
         
-        u = RK_4(G,t,a,b,f); 
+        u = eRK4(G,t); 
         
         if (G.child ~= 0)
-          
-            G.child = finiteVolume(G.child,a,b,t,t+G.k,f);
+            
+            G.child = eFiniteVolume(G.child,t,t+G.k);
             % Stops at t_n=t+G.k, where G.k is time step at parent grid 
             
             % Her må det skje noe mer hvis G skal ha flere undergrid 
              G.u = u;
-%              G = projectFlux(G,G.child);
+             G = projectFlux(G,G.child);
         else
              G.u = u;
         end
         
         t = t + G.k; 
         G.t = t;
-            
-%         if (G.child ~= 0)
-%             if t <= G.k*1
-%                 disp(G.u)
-%             end
-%         end
         
     end
     
 end
-
