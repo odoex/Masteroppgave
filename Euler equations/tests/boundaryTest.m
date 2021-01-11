@@ -37,7 +37,8 @@ assert(norm(bc-ex)<1.0e-16)
 
 %% Test 2: subgrid boundary values
 
-G.u = exactSolEuler(x,y,0);
+%G.u = exactSolEuler(x,y,0);
+G.u = createSolutionVector(G);
 
 ratio = 2;
 
@@ -53,26 +54,27 @@ G.child = G1;
 x1 = linspace(G1.location(1),G1.location(1)+G1.h*(G1.m_x-1),G1.m_x);
 y1 = linspace(G1.location(2),G1.location(2)+G1.h*(G1.m_y-1),G1.m_y);
 
-[g_x0, g_xm, g_y0, g_ym] = boundary(G1,0);
+% [g_x0, g_xm, g_y0, g_ym] = boundary(G1,0);
+[g_x0, g_y0] = boundaryAdv(G1,0);
 
 for i = G1.location(3):(G1.location(3)+(G1.m_x-1)/2)
     
     A((i-G1.location(3)+1)*2-1,:) = g_x0((i-G1.location(3)+1)*2 -1,:) - permute(G.u(i,G1.location(3),:),[1,3,2]);
-    A(G1.m_x+(i-G1.location(3)+1)*2-1,:) = g_xm((i-G1.location(3)+1)*2 -1,:) - permute(G.u(i,(G1.location(3)+(G1.m_x-1)/2),:),[1,3,2]);
+    %A(G1.m_x+(i-G1.location(3)+1)*2-1,:) = g_xm((i-G1.location(3)+1)*2 -1,:) - permute(G.u(i,(G1.location(3)+(G1.m_x-1)/2),:),[1,3,2]);
         
 	if (i > G1.location(3) && i < (G1.location(3)+(G1.m_x-1)/2))
         A((i-G1.location(3)+1)*2,:) = g_x0((i-G1.location(3)+1)*2,:) - (g_x0((i-G1.location(3)+1)*2+1,:) + g_x0((i-G1.location(3)+1)*2-1,:))/2;
-        A(G1.m_x+(i-G1.location(3)+1)*2,:) = g_xm((i-G1.location(3)+1)*2,:) - (g_xm((i-G1.location(3)+1)*2+1,:) + g_xm((i-G1.location(3)+1)*2-1,:))/2;
+        %A(G1.m_x+(i-G1.location(3)+1)*2,:) = g_xm((i-G1.location(3)+1)*2,:) - (g_xm((i-G1.location(3)+1)*2+1,:) + g_xm((i-G1.location(3)+1)*2-1,:))/2;
 	end
 end
     
 for j = G1.location(4):(G1.location(4)+(G1.m_y-1)/2)
 	A(2*G1.m_x+(j-G1.location(4)+1)*2-1,:) = g_y0((j-G1.location(4)+1)*2 -1,:) - permute(G.u(G1.location(4),j,:),[1,3,2]);
-	A(2*G1.m_x+G1.m_y+(j-G1.location(4)+1)*2-1,:) = g_ym((j-G1.location(4)+1)*2 -1,:) - permute(G.u((G1.location(4)+(G1.m_y-1)/2),j,:),[1,3,2]);
+	%A(2*G1.m_x+G1.m_y+(j-G1.location(4)+1)*2-1,:) = g_ym((j-G1.location(4)+1)*2 -1,:) - permute(G.u((G1.location(4)+(G1.m_y-1)/2),j,:),[1,3,2]);
         
     if (j > G1.location(4) && j < (G1.location(4)+(G1.m_x-1)/2))
         A(2*G1.m_x+(j-G1.location(4)+1)*2,:) = g_y0((j-G1.location(4)+1)*2,:) - (g_y0((j-G1.location(4)+1)*2+1,:) + g_y0((j-G1.location(4)+1)*2-1,:))/2;
-        A(2*G1.m_x+G1.m_y+(j-G1.location(4)+1)*2,:) = g_ym((j-G1.location(4)+1)*2,:) - (g_ym((j-G1.location(4)+1)*2+1,:) + g_ym((j-G1.location(4)+1)*2-1,:))/2;
+        %A(2*G1.m_x+G1.m_y+(j-G1.location(4)+1)*2,:) = g_ym((j-G1.location(4)+1)*2,:) - (g_ym((j-G1.location(4)+1)*2+1,:) + g_ym((j-G1.location(4)+1)*2-1,:))/2;
     end
 end
 

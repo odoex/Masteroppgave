@@ -18,6 +18,7 @@ function [U] = rhsFineGridAdv2(U,t,a,b,f,G)
 %     [g_x,g_y] = fineBoundaryAdv(G,f,t);
     
 
+
     for i = 1:m_x % 1 + fine grid points
         for j = 1:m_y
             

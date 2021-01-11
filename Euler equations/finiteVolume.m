@@ -11,9 +11,6 @@ function [G] = finiteVolume(G,t_0,t_n) % Sjekk om det kun er parametrene som er 
     
     t = t_0;
     n = round((t_n-t_0)/G.k);
-%     if(n <2)
-%         disp(FEIL)
-%     end
     
     o=0;
      while o < n %abs(t_n-t) > 1e-08
@@ -45,6 +42,16 @@ function [G] = finiteVolume(G,t_0,t_n) % Sjekk om det kun er parametrene som er 
         t = t + G.k;
         G.t = t;
         
+%         if (G.child ~= 0)
+%             x = linspace(G.location(1),G.location(1) + (G.m_x-1)*G.h,G.m_x)';
+%             y = linspace(G.location(2),G.location(2) + (G.m_y-1)*G.h,G.m_y)';
+%             [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m_x-1));
+%             X = X';
+%             Y = Y';
+%             %figure
+%             mesh(X,Y,G.u(:,:,1))
+%             pause;
+%         end
     end
     
 end

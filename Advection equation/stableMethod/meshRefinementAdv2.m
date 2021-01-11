@@ -35,7 +35,7 @@ locx = [40,65]; % Correct: this should be decided by location in interval
 locy = [40,65];
 ratio = 2;
 
-locx(1) = locx(1)-1;
+locx(1) = locx(1)-1; % Adding anothen point to 
 locy(1) = locy(1)-1;
 
 location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];

@@ -9,13 +9,13 @@ function [U] = rhsAdv(U,t,a,b,f,G)
 %   in U after the loop is done. 
 
     h = G.h;
-    m_x = G.m;
-    m_y = G.m;
+    m_x = G.m_x;
+    m_y = G.m_y;
     
     F_x = zeros(m_x);
     F_y = zeros(m_y);
     
-    [g_x,g_y] = boundaryAdv(G,f,t);
+    [g_x,g_y] = boundaryAdv(G,t); % Used to be: [g_x,g_y] = boundaryAdv(G,f,t)
     
 %     U(:,1)=g_x;
 %     U(1,:)=g_y;

@@ -23,6 +23,41 @@ function [U] = rhsFineGridAdv(U,t,G)
     U_f = f(U);
     U_g = g(U);
     
+    %...
+    
+    % Creating two vectors b_x and b_y for boundaries?
+    
+    % First the points outside the grid: 
+    F_x(1,2) = ( ((3/4)*U_f(2,2)+(1/4)*U_f(2,3))-G.parent(x-1,y+1) )/(2*h);
+    F_x(1,m_y-1) = ( ((3/4)*U_f(2,m_y-1)+(1/4)*U_f(2,m_y-2))-G.parent(x-1,y+(m_y-1)/2) )/(2*h);
+    F_x(m_x,2) = ( G.parent(x+(m_x-1)/2,y+1)-((3/4)*U_f(m_x-1,2)+(1/4)*U_f(m_x-1,3)) )/(2*h);
+    F_x(m_x,m_y-1) = ( G.parent(x+(m_x-1)/2+1,y+(m_y-1)/2-1)-((3/4)*U_f(m_x-1,m_y-1)+(1/4)*U_f(m_x-1,m_y-2)) )/(2*h);
+    
+    F_y(2,1) = ( ((3/4)*U_g(2,2)+(1/4)*U_g(3,2))-G.parent(x+1,y-1) )/(2*h);
+    F_y(m_x-1,1) = ( ((3/4)*U_g(m_x-1,2)+(1/4)*U_g(m_x-2,2))-G.parent(x+1,y-1) )/(2*h);
+    F_y(2,m_y) = ( G.parent(x+1,y+(m_y-1)/2+1)-((3/4)*U_g(2,m_y-1)+(1/4)*U_g(3,m_y-1)) )/(2*h);
+    F_y(m_x-1,m_y) = ( G.parent(x+(m_x-1)/2-1,y+(m_y-1)/2+1)-((3/4)*U_g(m_x-1,m_y-1)+(1/4)*U_g(m_x-2,m_y-1)) )/(2*h);
+    
+    F_y(1,2) = ( U_g(1,3)-G.parent(x,y) )/(2*h);
+    F_y(1,m_y-1) = ( G.parent(x,y+(m_y-1)/2)-U_g(1,m_y-2) )/(2*h);
+    F_y(m_x,2) = ( U_g(m_x,3)-G.parent(x+(m_x-1)/2,y) )/(2*h);
+    F_y(m_x,m_y-1) = ( G.parent(x+(m_x-1)/2,y+(m_y-1)/2)-U_g(m_x,m_y-2) )/(2*h);
+    
+    F_x(2,1) = ( U_g(3,1)-G.parent(x,y) )/(2*h);
+    F_x(m_x-1,1) = ( G.parent(x+(m_x-1)/2,y)-U_g(m_x-2,1) )/(2*h);
+    F_x(2,m_y) = ( U_g(3,m_y)-G.parent(x,y+(m_y-1)/2) )/(2*h);
+    F_x(m_x-1,m_y) = ( G.parent(x+(m_x-1)/2,y+(m_y-1)/2)-U_g(m_x-2,m_y) )/(2*h);
+    
+    
+    for i = 4:(m_x-4)/r
+    
+    for j = 4:(m_y-4)/r
+        F_x(1,j) = ( U_f() )
+    
+    
+    %...
+    
+    
     % First and last points are i = 1 and i = m_x. After that the fine grid
     % starts at i = 
 

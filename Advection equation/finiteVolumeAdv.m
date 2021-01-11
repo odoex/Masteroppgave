@@ -11,7 +11,8 @@ function [G] = finiteVolumeAdv(G,a,b,t_0,t_n,f)
     
     t = t_0; 
 
-     while abs(t_n-t) > 1e-08
+%      while abs(t_n-t) > 1e-08
+    while abs(t_n-t) > 1e-08
         
         
         u = RK_4Adv(G,t,a,b,f);
@@ -24,7 +25,7 @@ function [G] = finiteVolumeAdv(G,a,b,t_0,t_n,f)
             
             % Her må det skje noe mer hvis G skal ha flere undergrid 
              G.u = u;
-             G = projectFlux(G,G.child);
+             G = projectFluxAdv(G,G.child); % G = projectFlux(G,G.child);
 %              G = projectFineBoundary(G,G.child);
 
         else
