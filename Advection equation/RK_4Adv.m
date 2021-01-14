@@ -51,15 +51,27 @@ function [U] = RK_4Adv(G,t,a,b,f)
 %         k4 = rhsCoarseGridAdv(G.u + G.k*k3,t + G.k,a,b,f,G);
 %     end
     
-    k1 = rhsAdv(G.u,t,a,b,f,G);
-    k2 = rhsAdv(G.u + (G.k/2)*k1,t + G.k/2,a,b,f,G);
-    k3 = rhsAdv(G.u + (G.k/2)*k2,t + G.k/2,a,b,f,G);
-    k4 = rhsAdv(G.u + G.k*k3,t + G.k,a,b,f,G);
-     
+%     k1 = rhsAdv(G.u,t,a,b,f,G);
+%     k2 = rhsAdv(G.u + (G.k/2)*k1,t + G.k/2,a,b,f,G);
+%     k3 = rhsAdv(G.u + (G.k/2)*k2,t + G.k/2,a,b,f,G);
+%     k4 = rhsAdv(G.u + G.k*k3,t + G.k,a,b,f,G);
+%      
+%     
+%     U = G.u + (G.k/6)*(k1 + 2*k2 + 2*k3 + k4);
+
+    if(G.parent ~= 0) 
+        k1 = rhsFineGridAdv(G.u,t,G);
+        k2 = rhsFineGridAdv(G.u + (G.k/2)*k1,t + G.k/2,G);
+        k3 = rhsFineGridAdv(G.u + (G.k/2)*k2,t + G.k/2,G);
+        k4 = rhsFineGridAdv(G.u + G.k*k3,t + G.k,G);
+    else
+        k1 = rhsAdv(G.u,t,a,b,f,G);
+        k2 = rhsAdv(G.u + (G.k/2)*k1,t + G.k/2,a,b,f,G);
+        k3 = rhsAdv(G.u + (G.k/2)*k2,t + G.k/2,a,b,f,G);
+        k4 = rhsAdv(G.u + G.k*k3,t + G.k,a,b,f,G);
+    end
     
     U = G.u + (G.k/6)*(k1 + 2*k2 + 2*k3 + k4);
-
-
     
     % Husk: randbetingelsene er endret til å opdatere seg i tid med runge
     % kutta. Sjekk hvordan dette påvirker de finere gridene og om koden må

@@ -35,14 +35,14 @@ locx = [30,50]; % Correct: this should be decided by location in interval
 locy = [30,50];
 ratio = 2;
 
-% locx(1) = locx(1)-1; % Adding anothen point to
-% locy(1) = locy(1)-1;
-% locx(2) = locx(2)+1; 
-% locy(2) = locy(2)+1;
+locx(1) = locx(1)-1; % Adding anothen point to
+locy(1) = locy(1)-1;
+locx(2) = locx(2)+1; 
+locy(2) = locy(2)+1;
 
-location_1 = [(locx(1)-2)*G.h,(locy(1)-2)*G.h,locx(1)-1,locy(1)-1];
+location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
 
-G_1 = Node(G, location_1, G.h/ratio, k, (locx(2)-locx(1))*ratio +3, (locy(2)-locy(1))*ratio +3, n);
+G_1 = Node(G, location_1, G.h/ratio, k, (locx(2)-locx(1))*ratio +1, (locy(2)-locy(1))*ratio +1, n);
 G_1.t = 0;
 G.child = G_1;
 

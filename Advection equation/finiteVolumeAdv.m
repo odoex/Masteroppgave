@@ -25,13 +25,22 @@ function [G] = finiteVolumeAdv(G,a,b,t_0,t_n,f)
             
             % Her må det skje noe mer hvis G skal ha flere undergrid 
              G.u = u;
-             G = projectFluxAdv(G,G.child); % G = projectFlux(G,G.child);
-%              G = projectFineBoundary(G,G.child);
+%              G = projectFluxAdv(G,G.child); % G = projectFlux(G,G.child);
+             G = projectFineBoundary(G,G.child);
 
         else
              G.u = u;
         end
-        
+       
+        figure
+        [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m_x-1)); 
+        mesh(X,Y,G.u)
+        hold on
+        if G.child ~= 0
+            [X,Y] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m_x-1));
+            mesh(X,Y,G.child.u)
+            hold on
+        end
        
         t = t + G.k; 
         G.t = t;
