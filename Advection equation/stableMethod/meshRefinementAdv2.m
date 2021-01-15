@@ -14,7 +14,7 @@ t = t_0;
 m = 200;
 m_x = m;
 m_y = m;
-n = 2*m*3*t_n; 
+n = 2*m*3*t_n;
 
 % time steps for coarse grid
 k = (t_n-t_0)/(n-1);
