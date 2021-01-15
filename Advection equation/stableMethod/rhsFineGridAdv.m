@@ -130,7 +130,17 @@ function [U] = rhsFineGridAdv(U,t,G)
             F_y(i,j) = (U_g(i,j+1)-U_g(i,j-1))/(2*h);
         end
     end
-            
+
+    % Trying something else to look for the error, removing some functions
+    % where the error may be. Remove when the error is found.
+    
+%     for i = 3:(m_x-2)
+%         for j = 3:(m_y-2)
+%             F_x(i,j) = - 0.5*(U(i+1,j)-U(i-1,j))/(2*G.h) - 1*(U(i,j+1)-U(i,j-1))/(2*G.h);
+%             F_y(i,j)=0;
+%         end
+%     end
+    
 %     for i = 1:m_x 
 %         for j = 1:m_y
 %             
@@ -199,7 +209,7 @@ function [U] = rhsFineGridAdv(U,t,G)
 %     end
     
     
-    U_n = F_x + F_y;
+    U_n = -F_x - F_y;
 
     U = U_n;
 

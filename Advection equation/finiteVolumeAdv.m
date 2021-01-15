@@ -16,6 +16,7 @@ function [G] = finiteVolumeAdv(G,a,b,t_0,t_n,f)
         
         
         u = RK_4Adv(G,t,a,b,f);
+%         u = explicit_euler(G,t);
 
         if (G.child ~= 0)
           
@@ -32,15 +33,18 @@ function [G] = finiteVolumeAdv(G,a,b,t_0,t_n,f)
              G.u = u;
         end
        
-        figure
-        [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m_x-1)); 
-        mesh(X,Y,G.u)
-        hold on
-        if G.child ~= 0
-            [X,Y] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m_x-1));
-            mesh(X,Y,G.child.u)
-            hold on
-        end
+%         figure
+%         if G.child ~= 0
+%             [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m_x-1)); 
+%             mesh(X,Y,G.u)
+%             pause
+%         end
+%         hold on
+%         if G.child ~= 0
+%             [X,Y] = meshgrid(G.child.location(1):G.child.h:G.child.location(1)+G.child.h*(G.child.m_x-1));
+%             mesh(X,Y,G.child.u)
+%             hold on
+%         end
        
         t = t + G.k; 
         G.t = t;
