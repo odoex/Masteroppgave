@@ -45,7 +45,7 @@ G.u = u;
 % Fine grid: 
 
 locx = [round(locx(1)/h)+1,round(locx(2)/h)+1];
-locy = [round(locy(1)/h)+1,round(locy(2)/h)+1];
+locy = [round(locy(1)/h)+1,round(locy(2)/h)+1]; % [31,70] [0.303,0.697]
 location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
 
 G_1 = Node(G, location_1, G.h/ratio, k, (locx(2)-locx(1))*ratio +1, (locy(2)-locy(1))*ratio +1, n);
@@ -53,20 +53,30 @@ G_1.t = 0;
 
 %% Test 1: initiate subgrid test
 
-G.child = initiateSugbrid(G_1,ratio);
+G.child = initiateSubgrid(G_1,r);
 
 r = ratio;
-m_x = G.child.m_x;
-m_y = G.child.m_y;
-x = G.child.location(3); 
-y = G.child.location(4);
-Mx = x+(m_x-3)/r +2;
-My = y+(m_y-3)/r +2;
+m_x = G_1.m_x;
+m_y = G_1.m_y;
+x = G_1.location(3); 
+y = G_1.location(4);
+% Mx = x+(m_x-1)/r; % The extra points are not added yet 
+% My = y+(m_y-1)/r;
+Mx = x+(m_x-3)/r;
+My = y+(m_y-1)/r;
+
     
+A = zeros(Mx+1-x,My+1-y);
 for k = 1:4
-    A(2:m_x-1,2:m_y-1,k) = G.child.u(2:r:m_x-1,2:r:m_y-1,k)-G.u(x+1:Mx-1,y+1:My-1,k);
+    A(2:end-1,2:end-1,k) = G.child.u(2:r:m_x-1,2:r:m_y-1,k)-G.u(x:Mx,y:My,k);
     
-    A(2:m_x-1,1,k) = G.child.u(2:r:m_x-1,1,k)-G.u(x+1:Mx-1,y,k);
-    A(2:m_x-1,m_y,k) = G.child.u(2:r:m_x-1,m_y,k)-G.u(x+1:Mx-1,My,k);
-    A(1,2:m_y-1,k) = G.child.u(1,2:r:m_y-1,k)-G.u(x,y+1:My-1,k);
-    A(m_x,2:m_y-1,k) = G.child.u(m_x,2:r:m_y-1,k)-G.u(x,y+1:My-1,k);
+    A(2:end-1,1,k) = G.child.u(2:r:m_x-1,1,k)-G.u(x+1:Mx-1,y,k);
+    A(2:end-1,end,k) = G.child.u(2:r:m_x-1,m_y,k)-G.u(x+1:Mx-1,My,k);
+    A(1,2:end-1,k) = G.child.u(1,2:r:m_y-1,k)-G.u(x,y+1:My-1,k);
+    A(end,2:end-1,k) = G.child.u(m_x,2:r:m_y-1,k)-G.u(Mx,y+1:My-1,k);
+end
+
+isZero = max(max(max(abs(A)))) < 1.0e-12;
+
+%assert(max(max(max(abs(A)))) < 1.0e-12)
+assertTrue(isZero,True)

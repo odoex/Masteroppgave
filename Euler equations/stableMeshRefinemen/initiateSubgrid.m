@@ -8,11 +8,9 @@ function [G] = initiateSubgrid(G,r)
 %   outside the boundary in the fine grid vector u, but the cornerpoints
 %   are not included as they are not needed. 
 
-    h = G.h*r; % stepsize of parentgrid
+    h = G.h*r; % Step size of coarse grid
     m_x = G.m_x;
     m_y = G.m_y;
-    locx = [G.location(3),round(G.location(3)+(m_x-1))];
-    locy = [G.location(4),round(G.location(3)+(m_y-1))];
 
     x = linspace(G.location(1),G.location(1) + (G.m_x-1)*G.h,G.m_x)';
     y = linspace(G.location(2),G.location(2) + (G.m_y-1)*G.h,G.m_y)';
@@ -22,12 +20,15 @@ function [G] = initiateSubgrid(G,r)
 
     u(2:G.m_x+1,2:G.m_y+1,:) = G.u;
     
-    u(2:m_x+1,1,:)=exactSolEuler(x,G.location(2),0);
-    u(2:m_x+1,m_y+2,:)=exactSolEuler(x,G.location(2)+(G.m_y-1)*G.h,0);
-    u(1,2:m_y+1,:)=exactSolEuler(G.location(1),y,0);
-    u(m_y+2,2:m_y+1,:)=exactSolEuler(G.location(1) + (G.m_x-1)*G.h,y,0);
+    locx = [G.location(1)-h,G.location(1) + (G.m_x-1)*G.h+h]; 
+    locy = [G.location(2)-h,G.location(2) + (G.m_y-1)*G.h+h];
     
-    G.location = [(locx(1)-2)*h,(locy(1)-2)*h,locx(1)-1,locy(1)-1];
+    u(2:m_x+1,1,:) = exactSolEuler(x,locy(1),0);
+    u(2:m_x+1,m_y+2,:) = exactSolEuler(x,locy(2),0);
+    u(1,2:m_y+1,:) = exactSolEuler(locx(1),y,0);
+    u(m_y+2,2:m_y+1,:) = exactSolEuler(locx(2),y,0);
+    
+    G.location = [G.location(3)-h,G.location(4)-h,G.location(3)-1,G.location(4)-1];
     G.m_x = G.m_x+2;
     G.m_y = G.m_y+2;
     G.u = u;
