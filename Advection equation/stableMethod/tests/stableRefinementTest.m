@@ -83,7 +83,7 @@ p_yf = [U_f(1,2:r:m_y-1)',U_f(m_y,2:r:m_x-1)']';
 p_yg = [U_g(1,2:r:m_y-1)',U_g(m_y,2:r:m_x-1)']';
 
 p_x(1,1) = (p_xf(2,1)-f_adv(G.u(x,y)))/(4*h) + ((3/4)*U_g(2,2)+(1/4)*U_g(3,2) - g_adv(G.u(x+1,y-1)))/(4*h);
-p_x(end,1) = (f_adv(G.u(x+Mx-1,y))-p_xf(end-1,1))/(4*h) + ((3/4)*U_g(m_x-1,2)+(1/4)*U_g(m_x-2,2)-g_adv(G.u(x+Mx-1,y-1)))/(4*h);
+p_x(end,1) = (f_adv(G.u(x+Mx-1,y))-p_xf(end-1,1))/(4*h) + ((3/4)*U_g(m_x-1,2)+(1/4)*U_g(m_x-2,2) - g_adv(G.u(x+Mx-1,y-1)))/(4*h); % Feil: skal være - g_adv(G.u(x+Mx-2,y-1)))/(4*h);
 
 p_x(2:end-1,1) = (p_xf(3:end,1) - p_xf(1:end-2,1))/(4*h) + ((1/2)*U_g(4:r:m_x-3,2) + (1/4)*U_g(5:r:m_x-2,2) + (1/4)*U_g(3:r:m_x-4,2) - g_adv(G.u((x+2):(x+Mx-3),y-1)))/(4*h);
 

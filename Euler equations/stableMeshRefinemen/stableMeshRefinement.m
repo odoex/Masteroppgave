@@ -1,10 +1,22 @@
+% This method runs a finite volume scheme with a stable mesh refinement for
+% Euler equations. The mesh refinemen is proven to be stable, and involves
+% a set of points around each subgrid lying outside the boundary of the
+% refined subgrid to be modified in the finite volume calculations of the
+% subgrid so that stability is achieved. 
+% Standard variable settings:
+% - x = [0,1], y = [0,1] with 100 points in each direction
+% - Time t goes from 0 to 0.15 with time step: k = h/(ratio*(c + maxSpeed))
+% - Refinement = 2
+% - Subgrid location: [0.35,0.65]x[0.35,0.65]
+% - Speed of sound is c = 331
+
 format long
 
 % Interval in space 
 x = [0,1];
 y = [0,1];
 
-m = 50; 
+m = 100; 
 m_x = m;
 m_y = m;
 
@@ -18,8 +30,8 @@ t = t_0;
 
 % Mesh refinement 
 ratio = 2;
-locx = [0.3,0.7];
-locy = [0.3,0.7]; % Standard: [0.35,0.65];
+locx = [0.35,0.65];
+locy = [0.35,0.65]; 
 
 % Solution vector
 x = linspace(x(1),x(2),m_x)';
@@ -32,7 +44,7 @@ c = 331; % speed of sound
 
 maxSpeed = max(max(u(:,:,2)));
 
-k = h/(ratio*(c + maxSpeed)); 
+k = h/(ratio*(c + maxSpeed));
 
 n = floor((t_n-t_0)/k)+1;
 
@@ -45,7 +57,6 @@ G.t=t;
 G.u = u;
 
 % Fine grid: 
-%   Area to be covered by fine grid: Ex locx = [a,b] where a<b
 if (ratio > 1)
     locx = [round(locx(1)/h)+1,round(locx(2)/h)+1];
     locy = [round(locy(1)/h)+1,round(locy(2)/h)+1];
@@ -54,31 +65,25 @@ if (ratio > 1)
     G_1 = Node(G, location_1, G.h/ratio, k, (locx(2)-locx(1))*ratio +1, (locy(2)-locy(1))*ratio +1, n);
     G_1.t = 0;
     
-    % Suggestion:
-    
     G.child = initiateSubgrid(G_1,ratio);
     
-%     x_1 = linspace(G_1.location(1),G_1.location(1) + (G_1.m_x-1)*G_1.h,G_1.m_x)';
-%     y_1 = linspace(G_1.location(2),G_1.location(2) + (G_1.m_y-1)*G_1.h,G_1.m_y)';
-%     G_1.u = exactSolEuler(x_1,y_1,0);
-%     G.child = G_1;
 end
 
 % Plot of initial conditions
 [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m_x-1));
 X = X';
 Y = Y';
-% figure
-% quiver(X,Y,G.u(:,:,2),G.u(:,:,3));
-% figure
-% mesh(X,Y,G.u(:,:,1))
+figure
+quiver(X,Y,G.u(:,:,2),G.u(:,:,3));
+figure
+mesh(X,Y,G.u(:,:,1))
 
 % Running the scheme: 
-G = finiteVolume(G,t_0,t_n);
+G = finiteVolumeStableMethod(G,t_0,t_n);
 
 % Plot of final result
-% figure
-% quiver(X,Y,G.u(:,:,2),G.u(:,:,3));
+figure
+quiver(X,Y,G.u(:,:,2),G.u(:,:,3));
 figure
 mesh(X,Y,G.u(:,:,1))
 

@@ -8,6 +8,8 @@ function [u1] = rhs(u,t,G)
 %   solution is inserted to a temporary solution array U_n and is returned
 %   in U after the loop is done. 
 
+% Endre: u1 trenger ikke hete u1, kan hete u. Fjern alt med advection.
+
 %   For advection equation: Change 5 functions
 
 % Hvor skal delta bestemmes? 
@@ -15,8 +17,8 @@ function [u1] = rhs(u,t,G)
     m_x = G.m_x;
     m_y = G.m_y;
     
-    delta = 6.5; % Avhengig av h? Er delta konstant?
-    delta1 = 6.5;
+    delta = 6.5;%319*h; % Har brukt 3 for stable method
+    % Merk: her endres delta på fint og grovt grid
     
     F_x = zeros(m_x,m_y);
     F_y = zeros(m_x,m_y);
@@ -51,17 +53,17 @@ function [u1] = rhs(u,t,G)
             for j = 1:m_y
 
                 if (i == 1)
-                    F_x(i,j) = - ((U_f(i+1,j,l) - f_py(1,j,l)) - delta1*(u(i+1,j,l)-u(i,j,l)))/h;
+                    F_x(i,j) = - ((U_f(i+1,j,l) - f_py(1,j,l)) - delta*(u(i+1,j,l)-u(i,j,l)))/h;
                 elseif (i == m_x)
-                    F_x(i,j) = - ((f_py(2,j,l) - U_f(i-1,j,l)) + delta1*(u(i,j,l)-u(i-1,j,l)) )/h;
+                    F_x(i,j) = - ((f_py(2,j,l) - U_f(i-1,j,l)) + delta*(u(i,j,l)-u(i-1,j,l)) )/h;
                 else
                     F_x(i,j) = - ( U_f(i+1,j,l) - U_f(i-1,j,l) - delta*(u(i+1,j,l)-u(i,j,l)) + delta*(u(i,j,l)-u(i-1,j,l)) )/(2*h);
                 end
 
                 if (j == 1)
-                    F_y(i,j) = - ((U_g(i,j+1,l) - f_px(1,i,l)) - delta1*(u(i,j+1,l)-u(i,j,l)) )/h;
+                    F_y(i,j) = - ((U_g(i,j+1,l) - f_px(1,i,l)) - delta*(u(i,j+1,l)-u(i,j,l)) )/h;
                 elseif (j == m_y)
-                    F_y(i,j) = - (f_px(2,i,l) - U_g(i,j-1,l) + delta1*(u(i,j,l)-u(i,j-1,l)) )/h;
+                    F_y(i,j) = - (f_px(2,i,l) - U_g(i,j-1,l) + delta*(u(i,j,l)-u(i,j-1,l)) )/h;
                 else
                     F_y(i,j) = - (U_g(i,j+1,l) - U_g(i,j-1,l) - delta*(u(i,j+1,l)-u(i,j,l)) + delta*(u(i,j,l)-u(i,j-1,l)) )/(2*h);
                 end

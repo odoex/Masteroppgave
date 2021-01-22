@@ -7,7 +7,7 @@ format long
 x = [0,1];
 y = [0,1];
 
-m = 100; % > 50 Sjekk med 80 og 160 etterpå med mr
+m = 50; % > 50 Sjekk med 80 og 160 etterpå med mr
 m_x = m;
 m_y = m;
 
@@ -21,8 +21,8 @@ t = t_0;
 
 % Mesh refinement 
 ratio = 2;
-locx = [0.3,0.7];
-locy = [0.3,0.7]; % Standard: [0.35,0.65];
+locx = [0.35,0.65];
+locy = [0.35,0.65]; % Standard: [0.35,0.65];
 
 % Solution vector
 x = linspace(x(1),x(2),m_x)';
@@ -37,7 +37,7 @@ c = 331; % speed of sound
 
 maxSpeed = max(max(u(:,:,2)));
 
-k = h/(ratio*(c + maxSpeed)); %(0.002506265664160)/(ratio*(c + maxSpeed)); %(x(end)-x(1))/(200-1)/(ratio*(c + maxSpeed));
+k = h/(ratio*(c + maxSpeed)); 
 %k = h/(ratio*2); % For advection
 
 n = floor((t_n-t_0)/k)+1;
@@ -71,17 +71,17 @@ end
 [X,Y] = meshgrid(G.location(1):G.h:G.location(1)+G.h*(G.m_x-1));
 X = X';
 Y = Y';
-% figure
-% quiver(X,Y,G.u(:,:,2),G.u(:,:,3));
-% figure
-% mesh(X,Y,G.u(:,:,1))
+figure
+quiver(X,Y,G.u(:,:,2),G.u(:,:,3));
+figure
+mesh(X,Y,G.u(:,:,1))
 
 % Running the scheme: 
 G = finiteVolume(G,t_0,t_n);
 
 % Plot of final result
-% figure
-% quiver(X,Y,G.u(:,:,2),G.u(:,:,3));
+figure
+quiver(X,Y,G.u(:,:,2),G.u(:,:,3));
 figure
 mesh(X,Y,G.u(:,:,1))
 
