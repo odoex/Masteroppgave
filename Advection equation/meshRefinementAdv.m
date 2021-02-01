@@ -41,7 +41,7 @@ t_n = 1;
 t = t_0;
 
 % Number of points in space and time for main grid
-m = 25;
+m = 80;
 m_x = m;
 m_y = m;
 %n = 2*m*3*t_n; 
@@ -65,10 +65,13 @@ G.t=0;
 h=G.h;
 
 % Fine grid: 
-%   Area to be covered by fine grid: Ex locx = [a,b] where a<b
-locx = [10,20]; % Correct: this should be decided by location in interval
-locy = [10,20];
 ratio = 2;
+%   Area to be covered by fine grid: Ex locx = [a,b] where a<b
+locx = [0.35,0.65]; % Correct: this should be decided by location in interval
+locy = [0.35,0.65];
+
+locx = [round(locx(1)/h)+1,round(locx(2)/h)+1];
+locy = [round(locy(1)/h)+1,round(locy(2)/h)+1];
 
 location_1 = [(locx(1)-1)*G.h,(locy(1)-1)*G.h,locx(1),locy(1)];
 

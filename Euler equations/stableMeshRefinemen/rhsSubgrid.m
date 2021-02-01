@@ -6,7 +6,7 @@ function [U] = rhsSubgrid(U,G)
     m_y = G.m_y;
     r = G.parent.h/G.h; 
     
-    delta = 147*(G.parent.h); % Sjekker først med helt lik delta på grovt og fint grid. 
+    delta = 0;%1.5; % Sjekker først med helt lik delta på grovt og fint grid. 
     
     x = G.location(3); 
     y = G.location(4);

@@ -7,7 +7,7 @@ format long
 x = [0,1];
 y = [0,1];
 
-m = 50; % > 50 Sjekk med 80 og 160 etterpå med mr
+m = 100; % > 50 Sjekk med 80 og 160 etterpå med mr
 m_x = m;
 m_y = m;
 
@@ -16,7 +16,7 @@ h = (x(2)-x(1))/(m-1);
 
 % Interval in time
 t_0 = 0;
-t_n = 0.15;  
+t_n = 0.15;%0.15;  
 t = t_0;
 
 % Mesh refinement 
@@ -77,8 +77,9 @@ figure
 mesh(X,Y,G.u(:,:,1))
 
 % Running the scheme: 
+tic
 G = finiteVolume(G,t_0,t_n);
-
+toc
 % Plot of final result
 figure
 quiver(X,Y,G.u(:,:,2),G.u(:,:,3));

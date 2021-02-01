@@ -14,7 +14,7 @@ function [u] = exactSolEuler(x0,y0,t)
     c_p = gamma*(R_g/(gamma-1)); % Heat capacity at constant pressure
                                  % for air, room conditions
     % MACH NUMBER
-    Ma = 0.0; % Mach number (0.1 when not 0)
+    Ma = 0.0; % Mach number (0.1 when not 0) or 0.01?
     c = 331; % Speed of sound
     
     % ANGLE

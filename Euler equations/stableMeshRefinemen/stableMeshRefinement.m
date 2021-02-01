@@ -9,6 +9,7 @@
 % - Refinement = 2
 % - Subgrid location: [0.35,0.65]x[0.35,0.65]
 % - Speed of sound is c = 331
+% - diffusion: delta = 1.5;
 
 format long
 

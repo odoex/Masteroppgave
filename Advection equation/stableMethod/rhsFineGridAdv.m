@@ -4,7 +4,7 @@ function [U] = rhsFineGridAdv(U,t,G)
 % Hva er raskest av å sende hele matrisen gjennom funksjonen eller sende
 % hvert av elementene (Kun 12 tror jeg) gjennom funksjonen hver gang de
 % skal brukes?
-
+    delta = 0;%0*G.h;
     h = G.h;
     m_x = G.m_x;
     m_y = G.m_y;
@@ -210,8 +210,14 @@ function [U] = rhsFineGridAdv(U,t,G)
 %         end
 %     end
     
+    Ux(:,:,1) = U;
+    Uy(:,:,1) = U';
     
-    U_n = -F_x - F_y;
+    U_diff_x = diffusion(delta,Ux,G.parent.u,x,y,r,h);
+    U_diff_y = diffusion(delta,Uy,G.parent.u',y,x,r,h);
+    
+    U_n = - F_x-U_diff_x - F_y-U_diff_y';
+    %U_n = - F_y-U_diff_y';
 
     U = U_n;
 
