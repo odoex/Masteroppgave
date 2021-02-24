@@ -1,4 +1,4 @@
-classdef Node < handle
+classdef Node2 < handle
     % Node
     %   Node in a tree representing a hierarchy of grids. Each node is a
     %   grid with the following properties: 
@@ -13,6 +13,7 @@ classdef Node < handle
     %       m_x: number of space steps in x-direction
     %       m_y: number of space steps in y-direction
     %       u: solution vector for the grid
+    %       dF: vector for coarse side of interface on coarse grid
     
     properties
         parent
@@ -26,7 +27,7 @@ classdef Node < handle
         m_x
         m_y
         u
-        g
+        dF
     end
     
     methods
@@ -41,7 +42,7 @@ classdef Node < handle
             obj.m_y = m_y;
             obj.n = n;
         end
-        %%%
+        
         function set.child(obj, child)
             obj.child = child;
         end 

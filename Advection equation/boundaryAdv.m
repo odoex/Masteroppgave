@@ -11,8 +11,8 @@ function [g_x,g_y] = boundaryAdv(G,t)
     y = G.location(4);
 
     if G.parent == 0
-        g_x = exactSolAdv(linspace(G.location(1),G.location(1)+G.h*(G.m_x-1),G.m_x),0,t)'; % Hva gjør jeg med tiden her?
-        g_y = exactSolAdv(0,linspace(G.location(2),G.location(2)+G.h*(G.m_y-1),G.m_y),t)'; % Hva gjør jeg med tiden her?
+        g_x = exactSolAdv(linspace(G.location(1),G.location(1)+G.h*(G.m_x-1),G.m_x),0,t); % Hva gjør jeg med tiden her?
+        g_y = exactSolAdv(0,linspace(G.location(2),G.location(2)+G.h*(G.m_y-1),G.m_y),t); % Hva gjør jeg med tiden her?
     else
         
         r = G.parent.h/G.h; 

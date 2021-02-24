@@ -1,4 +1,4 @@
-function [G] = finiteVolume(G,t_0,t_n)
+function [G] = finiteVolumeGrid2(G,t_0,t_n)
 % finiteVolume Function running the finite volume scheme.
 %   This function takes a grid and a time interval as parametres. While 
 %   still inside the time interval the solution is
@@ -7,31 +7,39 @@ function [G] = finiteVolume(G,t_0,t_n)
 %   is updated to the time it was last calculated. If this grid has a finer
 %   grid, the solution for this grid is recursively calculated with this
 %   method.
-    
+    j = 100;
     t = t_0;
     n = round((t_n-t_0)/G.k);
-    
-    o=0;
-     while o < n %abs(t_n-t) > 1e-08
-        o=o+1;
+    figure
+	for i = 1:n
 
-        u = RK_4(G,t);
+        u = RK_4Grid2(G,t);
         
         if (G.child ~= 0)
             
-            G.child = finiteVolume(G.child,t,t+G.k);
+            G.child = finiteVolumeGrid2(G.child,t,t+G.k);
             % Stops at t_n=t+G.k, where G.k is time step at parent grid 
             
-            % Her må det skje noe mer hvis G skal ha flere undergrid 
-             G.u = u;
-             G = projectFlux(G,G.child);
+            G.u = u;
+            G = projectFlux(G,G.child);
         else
-             G.u = u;
+            G.u = u;
         end
+        
+%         if (i > j)
+%             j = j + 100;
+%             x = linspace(G.location(1),G.location(1) + (G.m_x-1)*G.h,G.m_x)';
+%             y = linspace(G.location(2),G.location(2) + (G.m_y-1)*G.h,G.m_y)';
+%             [X,Y] = meshgrid(x,y);
+%             X = X'; Y = Y';
+% 
+%             mesh(X,Y,G.u(:,:,1))
+%             pause
+%         end
 
         t = t + G.k;
         G.t = t;
         
-    end
+	end %sette på pause og sjekke at alle funksjonene som skal bli kalt blir kalt 
     
 end

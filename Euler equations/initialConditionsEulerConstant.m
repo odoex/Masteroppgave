@@ -12,7 +12,10 @@ function [u] = initialConditionsEulerConstant(x0,y0,t)
     
     u = ones(length(x0),length(y0),4);
     
-    u(:,:,1) = 1*u(:,:,1); % rho
+    A = meshgrid(x0,y0)';
+%     A = randi(10,length(x0),length(y0));
+    u(:,:,1) = A.*u(:,:,1); % rho
+%     u(:,:,1) = 1*u(:,:,1); % rho
     u(:,:,2) = 2*u(:,:,1).*u(:,:,2); % rho*v1
     u(:,:,3) = 3*u(:,:,1).*u(:,:,3); % rho*v2
     u(:,:,4) = (4/(gamma-1)+(1/2)*(u(:,:,2).^2+u(:,:,3).^2)./u(:,:,1)).*u(:,:,4); % p = 4
